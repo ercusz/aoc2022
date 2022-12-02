@@ -2,27 +2,30 @@ package main
 
 import (
 	"bufio"
+	_ "embed"
 	"fmt"
-	"log"
-	"os"
 	"strings"
 )
 
-func main() {
-	// Read input from file
-	file, err := os.Open("input.txt")
-	if err != nil {
-		log.Fatal(err)
-		os.Exit(0)
-	}
-	defer file.Close()
+//go:embed input.txt
+var input string
 
-	// Create new scanner
-	scanner := bufio.NewScanner(file)
-	// a(scanner)
-	// b(scanner)
-	// a_matrix(scanner)
-	b_matrix(scanner)
+func init() {
+	input = strings.TrimRight(input, "\n")
+	if len(input) == 0 {
+		panic("empty input.txt file")
+	}
+}
+
+func main() {
+	// part 1
+	a(input)
+	// part 2
+	b(input)
+	// part 1 (matrix)
+	a_matrix(input)
+	// part 2 (matrix)
+	b_matrix(input)
 }
 
 var points = map[string]int{
@@ -31,7 +34,8 @@ var points = map[string]int{
 	"Z": 3,
 }
 
-func a(scanner *bufio.Scanner) {
+func a(input string) {
+	scanner := bufio.NewScanner(strings.NewReader(input))
 	myScore := 0
 
 	for scanner.Scan() {
@@ -50,44 +54,35 @@ func a(scanner *bufio.Scanner) {
 		case "X":
 			if elvesChoice == "C" {
 				myScore += points[myChoice] + 6
-				fmt.Printf("You Win | %v\n", choice)
 				continue
 			} else if elvesChoice == "B" {
 				myScore += points[myChoice] + 0
-				fmt.Printf("You Lose | %v\n", choice)
 				continue
 			}
 
 			myScore += points[myChoice] + 3
-			fmt.Printf("You Draw | %v\n", choice)
 			continue
 		case "Y":
 			if elvesChoice == "A" {
 				myScore += points[myChoice] + 6
-				fmt.Printf("You Win | %v\n", choice)
 				continue
 			} else if elvesChoice == "C" {
 				myScore += points[myChoice] + 0
-				fmt.Printf("You Lose | %v\n", choice)
 				continue
 			}
 
 			myScore += points[myChoice] + 3
-			fmt.Printf("You Draw | %v\n", choice)
 			continue
 		case "Z":
 			if elvesChoice == "B" {
 				myScore += points[myChoice] + 6
-				fmt.Printf("You Win | %v\n", choice)
 				continue
 			} else if elvesChoice == "A" {
 				myScore += points[myChoice] + 0
-				fmt.Printf("You Lose | %v\n", choice)
 				continue
 			}
 
 			myScore += points[myChoice] + 3
-			fmt.Printf("You Draw | %v\n", choice)
 			continue
 		}
 	}
@@ -95,7 +90,8 @@ func a(scanner *bufio.Scanner) {
 	fmt.Println(myScore)
 }
 
-func b(scanner *bufio.Scanner) {
+func b(input string) {
+	scanner := bufio.NewScanner(strings.NewReader(input))
 	var endResult = map[string]int{
 		"X": 0,
 		"Y": 3,
@@ -148,7 +144,8 @@ func b(scanner *bufio.Scanner) {
 	fmt.Println(myScore)
 }
 
-func a_matrix(scanner *bufio.Scanner) {
+func a_matrix(input string) {
+	scanner := bufio.NewScanner(strings.NewReader(input))
 	// Your puzzle answer was 10310.
 	// +--------------+----------+-----------+--------------+----+
 	// |              | ROCK (X) | PAPER (Y) | SCISSORS (Z) | ME |
@@ -187,7 +184,8 @@ func a_matrix(scanner *bufio.Scanner) {
 	fmt.Println(myScore)
 }
 
-func b_matrix(scanner *bufio.Scanner) {
+func b_matrix(input string) {
+	scanner := bufio.NewScanner(strings.NewReader(input))
 	// Your puzzle answer was 14859.
 	// +--------------+------------------+------------------+------------------+
 	// |              | LOSE (X)         | DRAW (Y)         | WIN (Z)          |

@@ -2,39 +2,41 @@ package main
 
 import (
 	"bufio"
+	_ "embed"
 	"fmt"
 	"log"
-	"os"
 	"sort"
-	"strconv"
+	"strings"
+
+	"github.com/ercusz/aoc2022/utils"
 )
 
-func main() {
-	// Read input from file
-	file, err := os.Open("input.txt")
-	if err != nil {
-		log.Fatal(err)
-		os.Exit(0)
+//go:embed input.txt
+var input string
+
+func init() {
+	input = strings.TrimRight(input, "\n")
+	if len(input) == 0 {
+		panic("empty input.txt file")
 	}
-	defer file.Close()
-
-	// Create new scanner
-	scanner := bufio.NewScanner(file)
-
-	//part 1
-	a(scanner)
-	// part 2
-	b(scanner)
 }
 
-func a(scanner *bufio.Scanner) {
+func main() {
+	// part 1
+	a(input)
+	// part 2
+	b(input)
+}
+
+func a(input string) {
+	scanner := bufio.NewScanner(strings.NewReader(input))
 	max := 0
-	sum := 0 
+	sum := 0
 
 	for scanner.Scan() {
 		text := scanner.Text()
 		if text == "" {
-			if (sum > max) {
+			if sum > max {
 				max = sum
 			}
 			sum = 0
@@ -42,22 +44,18 @@ func a(scanner *bufio.Scanner) {
 			continue
 		}
 
-		curr, err := strconv.Atoi(text)
-		if err != nil {
-			log.Fatal(err)
-			os.Exit(0)
-		}
-		sum += curr
+		sum += utils.ToInt(text)
 	}
 
 	if err := scanner.Err(); err != nil {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("result=%v", max)
+	fmt.Println("result=", max)
 }
 
-func b(scanner *bufio.Scanner) {
+func b(input string) {
+	scanner := bufio.NewScanner(strings.NewReader(input))
 	var sums []int
 	sum := 0
 
@@ -69,12 +67,7 @@ func b(scanner *bufio.Scanner) {
 			continue
 		}
 
-		curr, err := strconv.Atoi(text)
-		if err != nil {
-			log.Fatal(err)
-			os.Exit(0)
-		}
-		sum += curr
+		sum += utils.ToInt(text)
 	}
 
 	if err := scanner.Err(); err != nil {
@@ -83,8 +76,8 @@ func b(scanner *bufio.Scanner) {
 
 	sort.Sort(sort.Reverse(sort.IntSlice(sums)))
 	result := 0
-	for i:=0; i<3; i++ {
+	for i := 0; i < 3; i++ {
 		result += sums[i]
 	}
-	fmt.Printf("result=%v", result)
+	fmt.Println("result=", result)
 }
