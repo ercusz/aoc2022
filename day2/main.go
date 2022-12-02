@@ -20,7 +20,9 @@ func main() {
 	// Create new scanner
 	scanner := bufio.NewScanner(file)
 	// a(scanner)
-	b(scanner)
+	// b(scanner)
+	// a_matrix(scanner)
+	b_matrix(scanner)
 }
 
 var points = map[string]int{
@@ -143,5 +145,83 @@ func b(scanner *bufio.Scanner) {
 		}
 	}
 
+	fmt.Println(myScore)
+}
+
+func a_matrix(scanner *bufio.Scanner) {
+	// Your puzzle answer was 10310.
+	// +--------------+----------+-----------+--------------+----+
+	// |              | ROCK (X) | PAPER (Y) | SCISSORS (Z) | ME |
+	// +--------------+----------+-----------+--------------+----+
+	// | (A) ROCK     | DRAW     | ME        | ELVES        |    |
+	// +--------------+----------+-----------+--------------+----+
+	// | (B) PAPER    | ELVES    | DRAW      | ME           |    |
+	// +--------------+----------+-----------+--------------+----+
+	// | (C) SCISSORS | ME       | ELVES     | DRAW         |    |
+	// +--------------+----------+-----------+--------------+----+
+	// | ELVES        |          |           |              |    |
+	// +--------------+----------+-----------+--------------+----+
+	myChoices := map[string]int{
+		"X": 0,
+		"Y": 1,
+		"Z": 2,
+	}
+
+	elvesChoices := map[string]int{
+		"A": 0,
+		"B": 1,
+		"C": 2,
+	}
+	compareTable := [][]int{
+		{3 + 1, 6 + 2, 0 + 3},
+		{0 + 1, 3 + 2, 6 + 3},
+		{6 + 1, 0 + 2, 3 + 3},
+	}
+	myScore := 0
+
+	for scanner.Scan() {
+		line := scanner.Text()
+		choice := strings.Split(line, " ")
+		myScore += compareTable[elvesChoices[choice[0]]][myChoices[choice[1]]]
+	}
+	fmt.Println(myScore)
+}
+
+func b_matrix(scanner *bufio.Scanner) {
+	// Your puzzle answer was 14859.
+	// +--------------+------------------+------------------+------------------+
+	// |              | LOSE (X)         | DRAW (Y)         | WIN (Z)          |
+	// +--------------+------------------+------------------+------------------+
+	// | (A) ROCK     | 0 + 3 (SCISSORS) | 3 + 1 (ROCK)     | 6 + 2 (PAPER)    |
+	// +--------------+------------------+------------------+------------------+
+	// | (B) PAPER    | 0 + 1 (ROCK)     | 3 + 2 (PAPER)    | 6 + 3 (SCISSORS) |
+	// +--------------+------------------+------------------+------------------+
+	// | (C) SCISSORS | 0 + 2 (PAPER)    | 3 + 3 (SCISSORS) | 6 + 1 (ROCK)     |
+	// +--------------+------------------+------------------+------------------+
+	// | ELVES        |                  |                  |                  |
+	// +--------------+------------------+------------------+------------------+
+	resultChoices := map[string]int{
+		"X": 0,
+		"Y": 1,
+		"Z": 2,
+	}
+
+	elvesChoices := map[string]int{
+		"A": 0,
+		"B": 1,
+		"C": 2,
+	}
+	compareTable := [][]int{
+		{0 + 3, 3 + 1, 6 + 2},
+		{0 + 1, 3 + 2, 6 + 3},
+		{0 + 2, 3 + 3, 6 + 1},
+	}
+	myScore := 0
+
+	for scanner.Scan() {
+		line := scanner.Text()
+		choice := strings.Split(line, " ")
+		myScore += compareTable[elvesChoices[choice[0]]][resultChoices[choice[1]]]
+	}
 	fmt.Println(myScore)
 }
