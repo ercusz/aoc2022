@@ -27,3 +27,14 @@ func Reverse[S ~[]E, E any](s S) {
 		s[i], s[j] = s[j], s[i]
 	}
 }
+
+func AbsInt(x int) int {
+	return AbsDiffInt(x, 0)
+}
+
+func AbsDiffInt(x, y int) int {
+	if x < y {
+		return y - x
+	}
+	return x - y
+}
